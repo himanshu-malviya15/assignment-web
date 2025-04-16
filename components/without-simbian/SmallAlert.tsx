@@ -77,11 +77,11 @@ export const SmallAlert: React.FC<SmallAlertProps> = ({
 
         // Fix: Use the bottom position instead of the center to match the icons positioning better
         // The icons are at the bottom of the card, so we need to position closer to the bottom
-        endY = ((targetIconsRect.bottom - 52) / vh) * 100;
+        endY = ((targetIconsRect.bottom - 10) / vh) * 100;
       } else {
         // Fallback if container not found
-        endX = ((targetRect.left + 10) / vw) * 100;
-        endY = ((targetRect.bottom - 52) / vh) * 100;
+        endX = ((targetRect.left + 30) / vw) * 100;
+        endY = ((targetRect.bottom - 25) / vh) * 100;
       }
 
       setPositions({
