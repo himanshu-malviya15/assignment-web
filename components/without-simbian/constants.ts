@@ -7,6 +7,9 @@ export const issueTexts = [
   "Wasting valuable analyst time on false positives",
   "Processing one alert at a time, missing the big picture",
   "More time fixing SOAR automation, less time on real threats",
+  "Wasting valuable analyst time on false positives",
+  "Processing one alert at a time, missing the big picture",
+  "More time fixing SOAR automation, less time on real threats",
 ];
 
 export const SmallCardIcons = [SmallCardIcon1, SmallCardIcon2, SmallCardIcon3];

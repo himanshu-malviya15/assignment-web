@@ -34,14 +34,13 @@ export const AlertCard: React.FC<AlertCardProps> = ({
 
   return (
     <div className={`p-5 ${bgColor} border ${borderColor} rounded-xl relative`}>
-      <div className="flex items-center mb-3">
-        <div className="text-white mr-2">
-          <Icon />
+      <div className="flex items-center justify-between mb-3">
+        <div className="flex items-center space-x-2">
+          <div className="text-white">
+            <Icon />
+          </div>
+          <span className="text-xl font-medium text-white">{title}</span>
         </div>
-        <span className="text-xl font-medium text-white">{title}</span>
-      </div>
-
-      <div className="flex justify-end">
         <motion.span
           key={count}
           initial={{ opacity: 0, scale: 0.8 }}
@@ -53,7 +52,7 @@ export const AlertCard: React.FC<AlertCardProps> = ({
       </div>
 
       <div className="mt-3 min-h-[40px]">
-        <div className="flex justify-start space-x-1">
+        <div className="flex justify-start -space-x-2">
           <AnimatePresence>
             {Array.from({
               length: isAnimating ? iconCount - 1 : iconCount,
@@ -67,7 +66,7 @@ export const AlertCard: React.FC<AlertCardProps> = ({
                 <Image
                   src={SmallCardIcons[index % SmallCardIcons.length]}
                   alt="Alert icon"
-                  width={20}
+                  width={32}
                   height={20}
                 />
               </motion.div>

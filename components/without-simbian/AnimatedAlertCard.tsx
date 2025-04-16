@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import clsx from "clsx";
 
 // Icons remain unchanged
 export const AlertIcon = ({ className = "" }) => (
@@ -93,218 +94,93 @@ interface AlertCardProps {
   issueDescription: string;
 }
 
-export const AnimatedAlertCard: React.FC<AlertCardProps> = ({
+interface AnimatedAlertCardProps {
+  title: string;
+  icon: React.FC;
+  textColor: string;
+  initialCount: number;
+  alertType: string;
+  isActive?: boolean;
+}
+
+const dummyAlerts = [
+  "Phishing Email",
+  "Suspicious Login",
+  "Unusual Port Activity",
+  "Malware Downloaded",
+  "Access from Unknown IP",
+];
+
+export const AnimatedAlertCard: React.FC<AnimatedAlertCardProps> = ({
   title,
+  icon: Icon,
+  textColor,
   initialCount,
-  countIncreaseInterval,
-  icon,
-  color,
-  alertExamples,
-  issueDescription,
+  alertType,
+  isActive = false,
 }) => {
   const [count, setCount] = useState(initialCount);
-  const [alerts, setAlerts] = useState<{ id: number; text: string }[]>([]);
-  const [latestAlert, setLatestAlert] = useState<number | null>(null);
+  const [alerts, setAlerts] = useState<string[]>([]);
+  const [shake, setShake] = useState(false);
 
   useEffect(() => {
-    const countInterval = setInterval(() => {
-      setCount((prev) => prev + Math.floor(Math.random() * 3) + 1);
-    }, countIncreaseInterval);
+    const interval = setInterval(() => {
+      const newAlert =
+        dummyAlerts[Math.floor(Math.random() * dummyAlerts.length)];
 
-    const alertInterval = setInterval(() => {
-      const newAlert = {
-        id: Date.now(),
-        text: alertExamples[Math.floor(Math.random() * alertExamples.length)],
-      };
+      setAlerts((prev) => [...prev, newAlert]);
+      setCount((prev) => prev + 1);
+      setShake(true);
 
-      setAlerts((prev) => {
-        const updated = [newAlert, ...prev].slice(0, 3);
-        return updated;
-      });
+      setTimeout(() => setShake(false), 600);
+    }, 3500); // Alert drops every ~3.5s
 
-      setLatestAlert(newAlert.id);
-
-      setTimeout(() => {
-        setLatestAlert(null);
-      }, 1500);
-    }, Math.random() * 3000 + 2000);
-
-    return () => {
-      clearInterval(countInterval);
-      clearInterval(alertInterval);
-    };
-  }, [alertExamples, countIncreaseInterval]);
-
-  const colorClasses = {
-    red: "border-red-500 bg-red-900/20",
-    yellow: "border-yellow-500 bg-yellow-900/20",
-    blue: "border-blue-500 bg-blue-900/20",
-  };
-
-  const iconColors = {
-    red: "text-red-500",
-    yellow: "text-yellow-500",
-    blue: "text-blue-500",
-  };
-
-  const countColors = {
-    red: "text-red-400",
-    yellow: "text-yellow-400",
-    blue: "text-blue-400",
-  };
-
-  const alertsContainerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1,
-        delayChildren: 0.05,
-      },
-    },
-  };
-
-  const alertItemVariants = {
-    hidden: { opacity: 0, height: 0, scale: 0.95, marginBottom: 0 },
-    visible: {
-      opacity: 1,
-      height: "auto",
-      scale: 1,
-      marginBottom: 8,
-      transition: {
-        duration: 0.4,
-        ease: "easeOut",
-      },
-    },
-    exit: {
-      opacity: 0,
-      height: 0,
-      scale: 0.95,
-      marginBottom: 0,
-      transition: {
-        duration: 0.3,
-        ease: "easeInOut",
-      },
-    },
-  };
-
-  const countVariants = {
-    initial: { opacity: 0.5, scale: 0.95 },
-    animate: { opacity: 1, scale: 1 },
-    exit: { opacity: 0, scale: 0.9, y: 10 },
-  };
-
-  const glowBoxShadow = {
-    red: "0 0 12px rgba(239, 68, 68, 0.4)",
-    yellow: "0 0 12px rgba(234, 179, 8, 0.4)",
-    blue: "0 0 12px rgba(96, 165, 250, 0.4)",
-  };
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <motion.div
-      className={`rounded-lg border p-5 ${
-        colorClasses[color as keyof typeof colorClasses]
-      }`}
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{
-        duration: 0.6,
-        ease: [0.25, 0.1, 0.25, 1],
-      }}
+      className={clsx(
+        "relative bg-black bg-opacity-20 backdrop-blur-sm rounded-xl p-5 border border-gray-700 overflow-hidden",
+        shake && "ring-2 ring-red-500"
+      )}
+      animate={{ scale: shake ? 1.03 : 1 }}
+      transition={{ duration: 0.3 }}
     >
-      <div className="flex items-center mb-4">
-        <motion.div
-          className={`mr-3 ${iconColors[color as keyof typeof iconColors]}`}
-          initial={{ rotate: -5, scale: 0.95 }}
-          animate={{ rotate: 0, scale: 1 }}
-          transition={{ duration: 0.6, ease: "easeOut" }}
-        >
-          {icon}
-        </motion.div>
-        <motion.h3
-          className="text-lg font-medium text-gray-200"
-          initial={{ opacity: 0, x: -10 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.5, delay: 0.1 }}
-        >
-          {title}
-        </motion.h3>
-      </div>
-
-      <AnimatePresence mode="popLayout">
-        <motion.div
+      <div className="flex items-center justify-between mb-3">
+        <div className="flex items-center space-x-3">
+          <div className="w-9 h-9 bg-red-500 rounded-full flex items-center justify-center text-white">
+            <Icon />
+          </div>
+          <h2 className={clsx("text-lg font-semibold", textColor)}>{title}</h2>
+        </div>
+        <motion.span
+          className="text-white text-xl font-bold"
           key={count}
-          className={`text-4xl font-bold mb-4 ${
-            countColors[color as keyof typeof countColors]
-          }`}
-          variants={countVariants}
-          initial="initial"
-          animate="animate"
-          exit="exit"
-          transition={{
-            type: "spring",
-            stiffness: 150,
-            damping: 20,
-            mass: 0.5,
-          }}
+          initial={{ scale: 0.8, opacity: 0 }}
+          animate={{ scale: 1.2, opacity: 1 }}
+          transition={{ type: "spring", stiffness: 300, damping: 20 }}
         >
           {count}
-        </motion.div>
-      </AnimatePresence>
+        </motion.span>
+      </div>
 
-      <motion.div
-        className="space-y-2 mb-4 overflow-hidden"
-        variants={alertsContainerVariants}
-        initial="hidden"
-        animate="visible"
-        layout
-      >
+      <div className="mt-2 space-y-1 max-h-24 overflow-hidden text-sm text-white">
         <AnimatePresence initial={false}>
-          {alerts.map((alert) => (
+          {alerts.slice(-3).map((alert, idx) => (
             <motion.div
-              key={alert.id}
-              layout
-              className={`relative text-sm p-2 rounded bg-gray-800/50 ${
-                latestAlert === alert.id ? `border` : ""
-              }`}
-              style={{
-                borderColor:
-                  latestAlert === alert.id
-                    ? `var(--tw-${color}-500, currentColor)`
-                    : undefined,
-              }}
-              variants={alertItemVariants}
-              initial="hidden"
-              animate="visible"
-              exit="exit"
-              whileHover={{ scale: 1.01 }}
+              key={`${alert}-${idx}`}
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 10 }}
+              transition={{ duration: 0.3 }}
+              className="bg-red-500 bg-opacity-20 rounded px-3 py-1"
             >
-              {alert.text}
-              {latestAlert === alert.id && (
-                <motion.div
-                  className="absolute inset-0 rounded pointer-events-none"
-                  initial={{ opacity: 0.5, boxShadow: "0 0 0px rgba(0,0,0,0)" }}
-                  animate={{
-                    opacity: 0,
-                    boxShadow:
-                      glowBoxShadow[color as keyof typeof glowBoxShadow],
-                  }}
-                  transition={{ duration: 1 }}
-                />
-              )}
+              {alert}
             </motion.div>
           ))}
         </AnimatePresence>
-      </motion.div>
-
-      <motion.div
-        className="text-sm text-gray-400 italic border-t border-gray-700 pt-3"
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: 0.2 }}
-      >
-        {issueDescription}
-      </motion.div>
+      </div>
     </motion.div>
   );
 };
