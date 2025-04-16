@@ -1,0 +1,150 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --foreground-rgb: 255, 255, 255;
+  --background-start-rgb: 17, 24, 39;
+  --background-end-rgb: 17, 24, 39;
+}
+
+body {
+  color: rgb(var(--foreground-rgb));
+  background: linear-gradient(to bottom, transparent, rgb(var(--background-end-rgb))) rgb(var(--background-start-rgb));
+  overflow-x: hidden;
+}
+
+.without-simbian-bg {
+  background: linear-gradient(to bottom, #1a2a4a, #0f172a);
+}
+
+.with-simbian-bg {
+  background: linear-gradient(to bottom, #1e40af, #1e3a8a);
+}
+
+.alert-card {
+  backdrop-filter: blur(8px);
+  background-color: rgba(30, 41, 59, 0.7);
+}
+
+.glow-red {
+  box-shadow: 0 0 15px rgba(239, 68, 68, 0.5);
+}
+
+.glow-yellow {
+  box-shadow: 0 0 15px rgba(234, 179, 8, 0.5);
+}
+
+.glow-green {
+  box-shadow: 0 0 15px rgba(34, 197, 94, 0.5);
+}
+
+.alert-icon-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 2px;
+}
+
+.vertical-line {
+  width: 2px;
+  background-color: #4ade80;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.horizontal-arrow {
+  height: 2px;
+  background-color: #4ade80;
+  position: absolute;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.animate-pulse-slow {
+  animation: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(15, 23, 42, 0.3);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(59, 130, 246, 0.5);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(59, 130, 246, 0.7);
+}
+
+/* Alert animation classes */
+.alert-enter {
+  transform: translateY(-20px);
+  opacity: 0;
+}
+
+.alert-enter-active {
+  transform: translateY(0);
+  opacity: 1;
+  transition: opacity 300ms, transform 300ms;
+}
+
+.alert-exit {
+  opacity: 1;
+}
+
+.alert-exit-active {
+  opacity: 0;
+  transition: opacity 300ms;
+}
+
+/* Floating icons animation */
+.floating-icon {
+  animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+/* Progress indicator */
+.scroll-progress {
+  position: fixed;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 4px;
+  height: 100px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+  z-index: 50;
+}
+
+.scroll-progress-indicator {
+  width: 100%;
+  background: white;
+  border-radius: 4px;
+  transition: height 0.3s ease, top 0.3s ease;
+}
