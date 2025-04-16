@@ -10,13 +10,13 @@ import {
   AutomationIcon,
   AIIcon,
   ShieldIcon,
-} from "../icons";
+} from "../../components/icons";
 import { SmallCardIcons } from "../without-simbian/constants";
 import {
   ActiveThreatIcon,
   IgnoredIcon,
   WronglyClosedIcon,
-} from "../without-simbian/icons";
+} from "../../components/icons";
 
 interface WithSimbianProps {
   isActive: boolean;
@@ -83,7 +83,7 @@ export default function WithSimbian({ isActive }: WithSimbianProps) {
       title: "Adapts automatically",
       description:
         "No SOAR needed. Investigate every alert, including new ones, with best of Simbian's knowledge and yours.",
-      icon: <ShieldIcon size={24} color="#4ade80" />,
+      icon: <ShieldIcon />,
     },
   ];
 

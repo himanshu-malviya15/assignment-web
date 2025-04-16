@@ -13,3 +13,32 @@ export const issueTexts = [
 ];
 
 export const SmallCardIcons = [SmallCardIcon1, SmallCardIcon2, SmallCardIcon3];
+
+export const ignoredAlertExamples = [
+  "Network scan from internal IP",
+  "DNS lookup for rare domain",
+  "Failed login attempt",
+  "Port scan detected",
+  "Unclassified network traffic",
+  "Unusual process activity",
+  "Large file transfer",
+  "Antivirus update",
+  "New device connected",
+  "Authentication timeout",
+];
+
+export const wronglyClosedExamples = [
+  "False positive malware alert",
+  "Legitimate access marked suspicious",
+  "Normal traffic pattern flagged",
+  "Dev testing identified as attack",
+  "VPN connection mistaken for breach",
+];
+
+export const activeThreatsExamples = [
+  "Phishing attempt detected",
+  "Brute force attack",
+  "Potential data exfiltration",
+  "Command and control traffic",
+  "Ransomware indicators",
+];

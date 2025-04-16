@@ -1,4 +1,3 @@
-// components/without-simbian/AlertCard.tsx
 "use client";
 
 import { motion, AnimatePresence } from "framer-motion";
@@ -21,7 +20,6 @@ export const AlertCard: React.FC<AlertCardProps> = ({
   icon: Icon,
   isActive = false,
   isAnimating = false,
-  isReceiving = false,
   textColor = "text-blue-400",
 }) => {
   const bgColor = isActive
@@ -29,8 +27,7 @@ export const AlertCard: React.FC<AlertCardProps> = ({
     : "bg-blue-900 bg-opacity-10";
   const borderColor = isActive ? "border-red-800" : "border-blue-800";
 
-  // Determine which icons to show based on the card type
-  const iconCount = isActive ? Math.min(count, 3) : 8; // Active threats show fewer icons
+  const iconCount = isActive ? Math.min(count, 3) : 8;
 
   return (
     <div className={`p-5 ${bgColor} border ${borderColor} rounded-xl relative`}>

@@ -1,9 +1,11 @@
 "use client";
 import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
+import { MenuIcon, XIcon } from "lucide-react"; // Or use Heroicons/Feather
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -14,10 +16,10 @@ export default function Navbar() {
     };
 
     window.addEventListener("scroll", handleScroll);
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
+    return () => window.removeEventListener("scroll", handleScroll);
   }, [scrolled]);
+
+  const toggleMenu = () => setMenuOpen((prev) => !prev);
 
   return (
     <motion.nav
@@ -29,7 +31,7 @@ export default function Navbar() {
       transition={{ duration: 0.5 }}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between h-16 items-center">
+        <div className="flex justify-between items-center h-16">
           <div className="flex items-center">
             <div className="flex-shrink-0 flex items-center">
               <div className="h-8 w-8 mr-2 bg-blue-500 rounded-full flex items-center justify-center">
@@ -49,41 +51,57 @@ export default function Navbar() {
               <span className="text-white text-xl font-semibold">Simbian</span>
             </div>
           </div>
-          <div className="hidden md:block">
-            <div className="ml-10 flex items-center space-x-4">
+
+          <div className="hidden md:flex ml-10 items-center space-x-4">
+            {["Products", "Company", "Resources", "Blog"].map((item) => (
               <a
+                key={item}
                 href="#"
                 className="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
               >
-                Products
+                {item}
               </a>
-              <a
-                href="#"
-                className="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
-              >
-                Company
-              </a>
-              <a
-                href="#"
-                className="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
-              >
-                Resources
-              </a>
-              <a
-                href="#"
-                className="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
-              >
-                Blog
-              </a>
-            </div>
+            ))}
           </div>
-          <div>
-            <button className="bg-blue-500 text-white px-4 py-2 rounded-full">
+
+          <div className="hidden md:block">
+            <button className="bg-blue-500 text-white px-4 py-2 rounded-full text-sm font-semibold">
               Book a Demo 🛡️
+            </button>
+          </div>
+
+          <div className="md:hidden flex items-center">
+            <button
+              onClick={toggleMenu}
+              className="text-gray-300 focus:outline-none"
+            >
+              {menuOpen ? <XIcon size={24} /> : <MenuIcon size={24} />}
             </button>
           </div>
         </div>
       </div>
+
+      {menuOpen && (
+        <motion.div
+          className="md:hidden bg-slate-800 bg-opacity-95 px-4 pt-2 pb-4 space-y-3 text-center"
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.3 }}
+        >
+          {["Products", "Company", "Resources", "Blog"].map((item) => (
+            <a
+              key={item}
+              href="#"
+              className="block text-gray-300 hover:text-white py-2 text-base font-medium"
+            >
+              {item}
+            </a>
+          ))}
+          <button className="w-full bg-blue-500 text-white px-4 py-2 rounded-full text-sm font-semibold mt-2">
+            Book a Demo 🛡️
+          </button>
+        </motion.div>
+      )}
     </motion.nav>
   );
 }

@@ -5,7 +5,6 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import Navbar from "@/components/navbar";
 import { WithoutSimbian } from "@/components/without-simbian/without-simbian";
 import WithSimbian from "@/components/with-sembian/with-simbian";
-import ScrollIndicator from "@/components/scroll-indicator";
 
 export default function Home() {
   const [activeSection, setActiveSection] = useState<"without" | "with">(
@@ -17,7 +16,6 @@ export default function Home() {
     offset: ["start start", "end end"],
   });
 
-  // Transform scroll progress for parallax effects
   const backgroundY = useTransform(scrollYProgress, [0, 1], ["0%", "30%"]);
 
   useEffect(() => {
@@ -25,7 +23,6 @@ export default function Home() {
       const position = window.scrollY;
       const windowHeight = window.innerHeight;
 
-      // Determine active section based on scroll position
       if (position < windowHeight * 0.5) {
         setActiveSection("without");
       } else {
@@ -45,7 +42,6 @@ export default function Home() {
       className="flex min-h-screen flex-col items-center"
     >
       <Navbar />
-      {/* Background world map with parallax effect */}
       <motion.div
         className="fixed inset-0 z-0 opacity-20 pointer-events-none"
         style={{

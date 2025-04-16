@@ -37,7 +37,6 @@ export default function MetricCard({
     green: "glow-green",
   };
 
-  // Update animated icons based on the count
   useEffect(() => {
     const newIcons = Array.from({ length: Math.min(count, iconCount) }).map(
       (_, i) => i
@@ -57,7 +56,7 @@ export default function MetricCard({
           prevCount > targetCount ? prevCount - 1 : prevCount + 1;
         return newCount;
       });
-    }, 400); // Decrease speed if you want it faster
+    }, 400);
 
     return () => clearInterval(interval);
   }, [isActive, targetCount]);

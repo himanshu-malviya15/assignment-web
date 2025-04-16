@@ -3,7 +3,6 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
-import { WithoutSimbianProps } from "./types";
 import { issueTexts, SmallCardIcons } from "./constants";
 import {
   IgnoredIcon,
@@ -12,14 +11,12 @@ import {
   ErrorIcon,
   MonitorIcon,
   ClockIcon,
-} from "./icons";
+} from "../icons";
 import { AlertCard } from "./AlertCard";
 import { SmallAlert } from "./SmallAlert";
 import { IssueCard } from "./IssueCard";
 
-export const WithoutSimbian: React.FC<WithoutSimbianProps> = ({
-  standalone = false,
-}) => {
+export const WithoutSimbian = () => {
   const [isMounted, setIsMounted] = useState(false);
   const [activeThreatsCount, setActiveThreatsCount] = useState(1);
   const [ignoredAlertsCount, setIgnoredAlertsCount] = useState(193);
@@ -41,7 +38,7 @@ export const WithoutSimbian: React.FC<WithoutSimbianProps> = ({
   useEffect(() => {
     setIsMounted(true);
 
-    const initialDelay = standalone ? 2000 : 3000;
+    const initialDelay = 3000;
 
     issueTexts.forEach((_, index) => {
       setTimeout(() => {
@@ -67,16 +64,10 @@ export const WithoutSimbian: React.FC<WithoutSimbianProps> = ({
         }, 1200);
       }, 800);
     }, initialDelay);
-  }, [standalone]);
+  }, []);
 
   if (!isMounted) {
-    return (
-      <div
-        className={`min-h-screen pt-24 pb-16 ${
-          standalone ? "bg-simbian-dark" : ""
-        }`}
-      />
-    );
+    return <div className={`min-h-screen pt-24 pb-16`} />;
   }
 
   const validIndex =

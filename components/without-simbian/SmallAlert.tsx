@@ -1,4 +1,3 @@
-// components/without-simbian/SmallAlert.tsx
 "use client";
 
 import { motion } from "framer-motion";
@@ -26,7 +25,6 @@ export const SmallAlert: React.FC<SmallAlertProps> = ({
     end: { xPercent: number; yPercent: number };
   } | null>(null);
 
-  // Select the appropriate icon based on alert type
   const icon = alertType === "ignored" ? SmallCardIcons[0] : SmallCardIcons[1];
 
   useEffect(() => {
