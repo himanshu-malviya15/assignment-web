@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { useEffect, useState, useRef } from "react";
 import Image from "next/image";
 import MetricCard from "../metric-card";
@@ -9,8 +9,6 @@ import {
   UserIcon,
   AutomationIcon,
   AIIcon,
-  WarningIcon,
-  AlertIcon,
   ShieldIcon,
 } from "../icons";
 import { SmallCardIcons } from "../without-simbian/constants";
@@ -31,7 +29,6 @@ export default function WithSimbian({ isActive }: WithSimbianProps) {
   const [currentStep, setCurrentStep] = useState(0);
   const timelineRef = useRef<HTMLDivElement>(null);
 
-  // Simulate decreasing counts when active
   useEffect(() => {
     if (!isActive) return;
 
@@ -44,7 +41,6 @@ export default function WithSimbian({ isActive }: WithSimbianProps) {
     return () => clearInterval(interval);
   }, [isActive]);
 
-  // Animate through steps when section becomes active
   useEffect(() => {
     if (!isActive) {
       setCurrentStep(0);
@@ -58,7 +54,6 @@ export default function WithSimbian({ isActive }: WithSimbianProps) {
     return () => clearInterval(interval);
   }, [isActive]);
 
-  // Scroll timeline into view when step changes
   useEffect(() => {
     if (timelineRef.current && currentStep > 0) {
       const stepElement = timelineRef.current.children[currentStep - 1];
@@ -73,33 +68,27 @@ export default function WithSimbian({ isActive }: WithSimbianProps) {
       title: "Triaged & Reported",
       description: "The SOC Agent handled investigation and reporting.",
       icon: <UserIcon size={24} color="#4ade80" />,
-      delay: 0.1,
     },
     {
       title: "Less noise",
       description: "90% of alerts resolved automatically, 24/7",
       icon: <AutomationIcon size={24} color="#4ade80" />,
-      delay: 0.2,
     },
     {
       title: "Holistic insight",
       description: "Correlate alerts and your environment into the big picture",
       icon: <AIIcon size={24} color="#4ade80" />,
-      delay: 0.3,
     },
     {
       title: "Adapts automatically",
       description:
         "No SOAR needed. Investigate every alert, including new ones, with best of Simbian's knowledge and yours.",
       icon: <ShieldIcon size={24} color="#4ade80" />,
-      delay: 0.4,
     },
   ];
 
-  const resolved = currentStep === steps.length - 1;
-
   return (
-    <div className="container mx-auto px-4 pt-24 pb-12 bg-blue-800 min-h-screen">
+    <div className="container mx-auto px-4 pt-24 pb-12 min-h-screen">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -114,8 +103,9 @@ export default function WithSimbian({ isActive }: WithSimbianProps) {
         </p>
       </motion.div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-        <div className="lg:col-span-5 space-y-6">
+      <div className="flex flex-col lg:flex-row gap-12">
+        {/* Metric Cards */}
+        <div className="flex flex-col gap-6 lg:w-1/3">
           <MetricCard
             title="Ignored Alerts"
             count={ignoredAlerts}
@@ -142,60 +132,98 @@ export default function WithSimbian({ isActive }: WithSimbianProps) {
           />
         </div>
 
-        <motion.div
-          className="absolute left-[45rem] top-40 flex flex-col items-center gap-4"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.5, delay: 0.3 }}
-        >
-          {/* Icon Stack */}
-          {[1, 2, 3].map((_, index) => (
-            <div key={index} className="justify-center shadow">
-              <Image
-                src={SmallCardIcons[index % SmallCardIcons.length]}
-                alt="Alert Icon"
-                width={44}
-                height={44}
-              />
-            </div>
-          ))}
-
-          {/* White vertical arrow from last icon (you already had this) */}
-          <div className="flex flex-col items-center">
-            <div className="w-0.5 bg-white h-96" />
-            <div className="w-0 h-0 border-l-4 border-r-4 border-t-8 border-l-transparent border-r-transparent border-t-white mt-1" />
-          </div>
-        </motion.div>
-
-        <div className="lg:col-span-7 relative">
-          <div className="relative">
-            <div className="space-y-16 relative ml-32" ref={timelineRef}>
-              {steps.map((step, index) => (
-                <div key={index}>
-                  {/* Only show horizontal line before the FIRST step */}
-
-                  {index === 0 && (
-                    <div className="flex items-center mt-16 -ml-4">
-                      <div className="h-0.5 bg-green-400 w-[9rem]" />
-                      <div className="w-0 h-0 border-t-4 border-b-4 border-l-8 border-t-transparent border-b-transparent border-l-green-400" />
-                    </div>
-                  )}
-                  <motion.div className="relative flex items-start -mt-4">
-                    <div className="relative ml-[10rem]">
-                      <div className="flex items-center mb-2">
-                        <div className="mr-3 text-green-400">{step.icon}</div>
-                        <h3 className="text-lg font-medium text-green-300">
-                          {step.title}
-                        </h3>
-                      </div>
-                      <p className="text-gray-200 text-sm">
-                        {step.description}
-                      </p>
-                    </div>
-                  </motion.div>
+        {/* Timeline + Icons */}
+        <div className="relative flex-1">
+          {/* Icons + Vertical Arrow */}
+          <div className="relative flex-1">
+            {/* Icons + Vertical Arrow */}
+            <motion.div
+              className="flex flex-col gap-4 mb-12
+               md:absolute md:top-0 md:left-0 sm:top-0 sm:left-0 sm:absolute items-start"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.5, delay: 0.3 }}
+            >
+              {SmallCardIcons.slice(0, 3).map((src, index) => (
+                <div key={index} className="shadow">
+                  <Image src={src} alt="Alert Icon" width={44} height={44} />
                 </div>
               ))}
-            </div>
+
+              {/* Vertical Arrow */}
+              <div className="flex flex-col items-center ml-4">
+                <div className="w-0.5 bg-white h-40 sm:h-56 md:h-72 lg:h-80" />
+                <div
+                  className="w-0 h-0 border-l-4 border-r-4 border-t-8 
+                      border-l-transparent border-r-transparent border-t-white mt-1"
+                />
+              </div>
+            </motion.div>
+          </div>
+          {/* Timeline */}
+          <div
+            className="sm:pl-8 md:pl-16 lg:pl-12 lg:mt-36 md:mt-36 sm:mt-36 -mt-[16rem] pl-12"
+            ref={timelineRef}
+          >
+            {steps.map((step, index) => (
+              <div key={index} className="mt-12">
+                <motion.div
+                  initial={{ opacity: 0, x: 10 }}
+                  animate={{
+                    opacity: currentStep >= index ? 1 : 0.3,
+                    x: 0,
+                  }}
+                  transition={{ duration: 0.4 }}
+                  className="flex items-start gap-6"
+                >
+                  {/* STEP 0: Horizontal arrow + icon + content */}
+                  {index === 0 ? (
+                    <>
+                      {/* Horizontal arrow as fixed-width block */}
+                      <div className="flex-shrink-0 flex items-center">
+                        <div className="h-0.5 bg-green-400 w-16 sm:w-24 md:w-36 lg:w-48" />
+                        <div className="w-0 h-0 border-t-4 border-b-4 border-l-8 border-t-transparent border-b-transparent border-l-green-400" />
+                      </div>
+
+                      {/* Icon */}
+                      <div className="flex-shrink-0 text-green-400">
+                        {step.icon}
+                      </div>
+
+                      {/* Content */}
+                      <div className="flex flex-col">
+                        <h3 className="text-lg font-semibold text-green-300">
+                          {step.title}
+                        </h3>
+                        <p className="text-sm text-gray-200">
+                          {step.description}
+                        </p>
+                      </div>
+                    </>
+                  ) : (
+                    <>
+                      {/* Spacer to match arrow size */}
+                      <div className="flex-shrink-0 w-16 sm:w-24 md:w-36 lg:w-48" />
+
+                      {/* Icon */}
+                      <div className="flex-shrink-0 text-green-400">
+                        {step.icon}
+                      </div>
+
+                      {/* Content */}
+                      <div className="flex flex-col">
+                        <h3 className="text-lg font-semibold text-green-300">
+                          {step.title}
+                        </h3>
+                        <p className="text-sm text-gray-200">
+                          {step.description}
+                        </p>
+                      </div>
+                    </>
+                  )}
+                </motion.div>
+              </div>
+            ))}
           </div>
         </div>
       </div>

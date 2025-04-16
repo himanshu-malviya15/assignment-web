@@ -86,7 +86,7 @@ export const WithoutSimbian: React.FC<WithoutSimbianProps> = ({
         {/* Main content */}
         <div className="grid grid-cols-12 gap-8">
           {/* Left column - Issue Cards */}
-          <div className="col-span-12 md:col-span-6 space-y-6">
+          <div className="col-span-12 md:col-span-6 space-y-6 mt-32">
             <AnimatePresence>
               {showIssueCards.map(
                 (show, index) =>
@@ -94,8 +94,10 @@ export const WithoutSimbian: React.FC<WithoutSimbianProps> = ({
                     <IssueCard
                       key={index}
                       icon={issueIcons[index]}
-                      text={issueTexts[index]}
+                      title={issueTexts[index]}
                       index={index}
+                      description={issueTexts[index]}
+                      isActive={true}
                     />
                   )
               )}
@@ -105,23 +107,17 @@ export const WithoutSimbian: React.FC<WithoutSimbianProps> = ({
           {/* Right column - Simbian Features */}
           <div className="col-span-12 md:col-span-6">
             <motion.div
-              className="mb-12 text-left md:text-right"
+              className="mb-12 text-center"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.2 }}
             >
-              <h1 className="text-5xl md:text-6xl font-bold text-blue-400 mb-4">
+              <h1 className="text-4xl md:text-5xl font-bold text-white mb-2">
                 Without Simbian
               </h1>
-              <p className="text-xl text-blue-300">
+              <p className="text-xl text-gray-200">
                 If this sounds all too familiar, you might want to...
               </p>
-
-              <div className="mt-6 mb-12 hidden md:block">
-                <button className="bg-white hover:bg-blue-100 text-blue-500 font-bold py-3 px-6 rounded-full">
-                  Book a Demo 🛡️
-                </button>
-              </div>
             </motion.div>
 
             <div className="space-y-6">
