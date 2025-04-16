@@ -3,7 +3,7 @@
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import { SmallCardIcons } from "./constants";
+import { SmallCardIcons } from "../constants";
 
 export interface SmallAlertProps {
   startRef: React.RefObject<HTMLDivElement>;
@@ -107,6 +107,8 @@ export const SmallAlert: React.FC<SmallAlertProps> = ({
       animate={{
         x: `${positions.end.xPercent - positions.start.xPercent}vw`,
         y: `${positions.end.yPercent - positions.start.yPercent}vh`,
+        opacity: 0, // <--- fade out on arrival
+        scale: 0.8, // <--- optional: scale down on arrival
       }}
       transition={{
         duration: 0.8,

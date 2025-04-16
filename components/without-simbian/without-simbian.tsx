@@ -3,7 +3,7 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
-import { issueTexts, SmallCardIcons } from "./constants";
+import { issueTexts, SmallCardIcons } from "../constants";
 import {
   IgnoredIcon,
   WronglyClosedIcon,
@@ -31,41 +31,50 @@ export const WithoutSimbian = () => {
   const activeThreatsContainerRef = useRef<HTMLDivElement>(null);
   const issueCardRef = useRef<HTMLDivElement>(null);
   const lastIconRef = useRef<HTMLDivElement>(null);
-  const timelineRef = useRef<HTMLDivElement>(null);
 
   const issueIcons = [ErrorIcon, MonitorIcon, ClockIcon];
 
   useEffect(() => {
     setIsMounted(true);
 
-    const initialDelay = 3000;
+    let issueInterval: NodeJS.Timeout;
+    let alertTimeout: NodeJS.Timeout;
 
-    issueTexts.forEach((_, index) => {
-      setTimeout(() => {
-        setCurrentIssueIndex(index % issueIcons.length);
-      }, 1000 * (index + 1));
-    });
+    issueInterval = setInterval(() => {
+      setCurrentIssueIndex((prevIndex) =>
+        prevIndex === null ? 0 : (prevIndex + 1) % issueIcons.length
+      );
+    }, 2000);
 
-    setTimeout(() => {
+    const startAlertLoop = () => {
       setCurrentAnimation("ignored");
 
       setTimeout(() => {
-        setIgnoredAlertsCount((prev) => prev - 1);
-        setActiveThreatsCount((prev) => prev + 1);
-
+        setIgnoredAlertsCount((prev) => (prev > 0 ? prev - 1 : 193));
+        setActiveThreatsCount((prev) => (prev >= 999 ? 0 : prev + 1));
         setTimeout(() => {
           setCurrentAnimation("wronglyClosed");
 
           setTimeout(() => {
-            setWronglyClosedCount((prev) => prev - 1);
+            setWronglyClosedCount((prev) => (prev > 0 ? prev - 1 : 23));
             setActiveThreatsCount((prev) => prev + 1);
+            setActiveThreatsCount((prev) => (prev >= 999 ? 0 : prev + 1));
             setCurrentAnimation(null);
+            alertTimeout = setTimeout(startAlertLoop, 2000);
           }, 800);
         }, 1200);
       }, 800);
-    }, initialDelay);
-  }, []);
+    };
 
+    const initialDelay = 1000;
+    const initialTimeout = setTimeout(startAlertLoop, initialDelay);
+
+    return () => {
+      clearInterval(issueInterval);
+      clearTimeout(initialTimeout);
+      clearTimeout(alertTimeout);
+    };
+  }, []);
   if (!isMounted) {
     return <div className={`min-h-screen pt-24 pb-16`} />;
   }
@@ -98,7 +107,6 @@ export const WithoutSimbian = () => {
         </motion.div>
 
         <div className="grid grid-cols-12 gap-8">
-          {/* IssueCard column */}
           <div className="col-span-12 md:col-span-5 space-y-6 mt-24">
             <AnimatePresence mode="wait">
               {currentIssueIndex !== null && (
@@ -116,7 +124,6 @@ export const WithoutSimbian = () => {
             </AnimatePresence>
           </div>
 
-          {/* Timeline & Alert side */}
           <div className="col-span-12 md:col-span-6 relative ml-20">
             <motion.div
               className="flex flex-col gap-4 mb-12 md:absolute sm:absolute items-start"
@@ -129,7 +136,6 @@ export const WithoutSimbian = () => {
                   <Image src={src} alt="Alert Icon" width={44} height={44} />
                 </div>
               ))}
-              {/* Last icon with ref */}
               <div ref={lastIconRef} className="shadow relative">
                 <Image
                   src={SmallCardIcons[2]}
@@ -138,7 +144,6 @@ export const WithoutSimbian = () => {
                   height={44}
                 />
 
-                {/* Green left arrow positioned to start from the last icon */}
                 <motion.div
                   className="absolute left-0 top-1/2 transform -translate-y-1/2 -translate-x-full"
                   initial={{ opacity: 0, width: 0 }}
@@ -158,7 +163,6 @@ export const WithoutSimbian = () => {
               </div>
             </motion.div>
 
-            {/* Alerts */}
             <div className="sm:pl-8 md:pl-16 lg:pl-12 lg:mt-36 md:mt-36 sm:mt-36 -mt-[16rem] pl-12 space-y-6 ml-8">
               <div ref={ignoredContainerRef}>
                 <AlertCard
@@ -191,7 +195,6 @@ export const WithoutSimbian = () => {
                 />
               </div>
 
-              {/* Animated Transfers */}
               <AnimatePresence>
                 {currentAnimation === "ignored" &&
                   ignoredContainerRef.current &&

@@ -5,13 +5,12 @@ import { useEffect, useState, useRef } from "react";
 import Image from "next/image";
 import MetricCard from "../metric-card";
 import {
-  CheckIcon,
   UserIcon,
   AutomationIcon,
   AIIcon,
   ShieldIcon,
 } from "../../components/icons";
-import { SmallCardIcons } from "../without-simbian/constants";
+import { SmallCardIcons } from "../constants";
 import {
   ActiveThreatIcon,
   IgnoredIcon,
@@ -104,7 +103,6 @@ export default function WithSimbian({ isActive }: WithSimbianProps) {
       </motion.div>
 
       <div className="flex flex-col lg:flex-row gap-12">
-        {/* Metric Cards */}
         <div className="flex flex-col gap-6 lg:w-1/3">
           <MetricCard
             title="Ignored Alerts"
@@ -132,11 +130,8 @@ export default function WithSimbian({ isActive }: WithSimbianProps) {
           />
         </div>
 
-        {/* Timeline + Icons */}
         <div className="relative flex-1">
-          {/* Icons + Vertical Arrow */}
           <div className="relative flex-1">
-            {/* Icons + Vertical Arrow */}
             <motion.div
               className="flex flex-col gap-4 mb-12
                md:absolute md:top-0 md:left-0 sm:top-0 sm:left-0 sm:absolute items-start"
@@ -150,7 +145,6 @@ export default function WithSimbian({ isActive }: WithSimbianProps) {
                 </div>
               ))}
 
-              {/* Vertical Arrow */}
               <div className="flex flex-col items-center ml-4">
                 <div className="w-0.5 bg-white h-40 sm:h-56 md:h-72 lg:h-80" />
                 <div
@@ -160,7 +154,6 @@ export default function WithSimbian({ isActive }: WithSimbianProps) {
               </div>
             </motion.div>
           </div>
-          {/* Timeline */}
           <div
             className="sm:pl-8 md:pl-16 lg:pl-12 lg:mt-36 md:mt-36 sm:mt-36 -mt-[16rem] pl-12"
             ref={timelineRef}
@@ -176,21 +169,17 @@ export default function WithSimbian({ isActive }: WithSimbianProps) {
                   transition={{ duration: 0.4 }}
                   className="flex items-start gap-6"
                 >
-                  {/* STEP 0: Horizontal arrow + icon + content */}
                   {index === 0 ? (
                     <>
-                      {/* Horizontal arrow as fixed-width block */}
                       <div className="flex-shrink-0 flex items-center">
                         <div className="h-0.5 bg-green-400 w-16 sm:w-24 md:w-36 lg:w-48" />
                         <div className="w-0 h-0 border-t-4 border-b-4 border-l-8 border-t-transparent border-b-transparent border-l-green-400" />
                       </div>
 
-                      {/* Icon */}
                       <div className="flex-shrink-0 text-green-400">
                         {step.icon}
                       </div>
 
-                      {/* Content */}
                       <div className="flex flex-col">
                         <h3 className="text-lg font-semibold text-green-300">
                           {step.title}
@@ -202,15 +191,12 @@ export default function WithSimbian({ isActive }: WithSimbianProps) {
                     </>
                   ) : (
                     <>
-                      {/* Spacer to match arrow size */}
                       <div className="flex-shrink-0 w-16 sm:w-24 md:w-36 lg:w-48" />
 
-                      {/* Icon */}
                       <div className="flex-shrink-0 text-green-400">
                         {step.icon}
                       </div>
 
-                      {/* Content */}
                       <div className="flex flex-col">
                         <h3 className="text-lg font-semibold text-green-300">
                           {step.title}

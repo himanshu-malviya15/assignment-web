@@ -1,4 +1,3 @@
-// components/without-simbian/constants.ts
 import SmallCardIcon1 from "@/components/images/small-card-icon-1.png";
 import SmallCardIcon2 from "@/components/images/small-card-icon-2.png";
 import SmallCardIcon3 from "@/components/images/small-card-icon-3.png";

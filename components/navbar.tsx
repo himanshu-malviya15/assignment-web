@@ -1,7 +1,7 @@
 "use client";
 import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
-import { MenuIcon, XIcon } from "lucide-react"; // Or use Heroicons/Feather
+import { MenuIcon, XIcon } from "lucide-react";
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);

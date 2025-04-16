@@ -2,7 +2,7 @@
 
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
-import { SmallCardIcons } from "./constants";
+import { SmallCardIcons } from "../constants";
 
 export interface AlertCardProps {
   title: string;
@@ -19,7 +19,6 @@ export const AlertCard: React.FC<AlertCardProps> = ({
   count,
   icon: Icon,
   isActive = false,
-  isAnimating = false,
   textColor = "text-blue-400",
 }) => {
   const bgColor = isActive
@@ -50,24 +49,25 @@ export const AlertCard: React.FC<AlertCardProps> = ({
 
       <div className="mt-3 min-h-[40px]">
         <div className="flex justify-start -space-x-2">
-          <AnimatePresence>
-            {Array.from({
-              length: isAnimating ? iconCount - 1 : iconCount,
-            }).map((_, index) => (
-              <motion.div
-                key={index}
-                className="p-1 bg-white bg-opacity-10 rounded"
-                initial={false}
-                exit={isAnimating ? { opacity: 0, y: 20, scale: 0.8 } : {}}
-              >
-                <Image
-                  src={SmallCardIcons[index % SmallCardIcons.length]}
-                  alt="Alert icon"
-                  width={32}
-                  height={20}
-                />
-              </motion.div>
-            ))}
+          <AnimatePresence initial={false}>
+            {Array(Math.min(count, 10))
+              .fill(0)
+              .map((_, i) => (
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, scale: 0.5 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.5 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  <Image
+                    src={SmallCardIcons[i % SmallCardIcons.length]}
+                    alt="icon"
+                    width={32}
+                    height={20}
+                  />
+                </motion.div>
+              ))}
           </AnimatePresence>
         </div>
       </div>

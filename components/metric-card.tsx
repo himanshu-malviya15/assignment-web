@@ -4,7 +4,7 @@ import type React from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
-import { SmallCardIcons } from "./without-simbian/constants";
+import { SmallCardIcons } from "./constants";
 
 interface MetricCardProps {
   title: string;
@@ -103,8 +103,8 @@ export default function MetricCard({
                     <Image
                       src={SmallCardIcons[i % SmallCardIcons.length]}
                       alt="Alert Icon"
-                      width={24}
-                      height={24}
+                      width={32}
+                      height={20}
                       className="w-10 h-6"
                     />
                   </div>
