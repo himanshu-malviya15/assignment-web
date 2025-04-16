@@ -57,7 +57,6 @@ export const WithoutSimbian = () => {
 
           setTimeout(() => {
             setWronglyClosedCount((prev) => (prev > 0 ? prev - 1 : 23));
-            setActiveThreatsCount((prev) => prev + 1);
             setActiveThreatsCount((prev) => (prev >= 999 ? 0 : prev + 1));
             setCurrentAnimation(null);
             alertTimeout = setTimeout(startAlertLoop, 2000);
@@ -75,8 +74,9 @@ export const WithoutSimbian = () => {
       clearTimeout(alertTimeout);
     };
   }, []);
+
   if (!isMounted) {
-    return <div className={`min-h-screen pt-24 pb-16`} />;
+    return <div className="min-h-screen pt-24 pb-16" />;
   }
 
   const validIndex =
@@ -85,13 +85,8 @@ export const WithoutSimbian = () => {
       : 0;
 
   return (
-    <div
-      className="min-h-screen"
-      style={{
-        background: "linear-gradient(to bottom, #17182B, #091013)",
-      }}
-    >
-      <div className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-16">
+    <div className="min-h-screen bg-gradient-to-b from-[#17182B] to-[#091013]">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-16">
         <motion.div
           className="mb-12 text-center"
           initial={{ opacity: 0, y: 20 }}
@@ -106,11 +101,11 @@ export const WithoutSimbian = () => {
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-12 gap-8">
-          <div className="col-span-12 md:col-span-5 space-y-6 mt-24">
+        <div className="flex flex-col lg:flex-row gap-8">
+          <div className="w-full lg:w-5/12 flex justify-center lg:justify-start mt-4 lg:mt-24">
             <AnimatePresence mode="wait">
               {currentIssueIndex !== null && (
-                <div ref={issueCardRef}>
+                <div ref={issueCardRef} className="w-full max-w-md">
                   <IssueCard
                     key={currentIssueIndex}
                     icon={issueIcons[validIndex]}
@@ -124,9 +119,11 @@ export const WithoutSimbian = () => {
             </AnimatePresence>
           </div>
 
-          <div className="col-span-12 md:col-span-6 relative ml-20">
+          {/* Right: Alert Flow */}
+          <div className="w-full lg:w-7/12 relative flex flex-col items-end lg:items-start -mt-64 lg:mt-0">
+            {/* Vertical icons and connection line */}
             <motion.div
-              className="flex flex-col gap-4 mb-12 md:absolute sm:absolute items-start"
+              className="flex flex-col items-center gap-4 mb-8 lg:absolute lg:left-0"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.5, delay: 0.3 }}
@@ -136,6 +133,7 @@ export const WithoutSimbian = () => {
                   <Image src={src} alt="Alert Icon" width={44} height={44} />
                 </div>
               ))}
+
               <div ref={lastIconRef} className="shadow relative">
                 <Image
                   src={SmallCardIcons[2]}
@@ -143,7 +141,6 @@ export const WithoutSimbian = () => {
                   width={44}
                   height={44}
                 />
-
                 <motion.div
                   className="absolute left-0 top-1/2 transform -translate-y-1/2 -translate-x-full"
                   initial={{ opacity: 0, width: 0 }}
@@ -157,13 +154,14 @@ export const WithoutSimbian = () => {
                 </motion.div>
               </div>
 
-              <div className="flex flex-col items-center ml-4">
-                <div className="w-0.5 bg-white h-40 sm:h-56 md:h-72 lg:h-80" />
+              <div className="flex flex-col items-center mt-2">
+                <div className="w-0.5 bg-white h-32 sm:h-40 md:h-56 lg:h-64" />
                 <div className="w-0 h-0 border-l-4 border-r-4 border-t-8 border-l-transparent border-r-transparent border-t-white mt-1" />
               </div>
             </motion.div>
 
-            <div className="sm:pl-8 md:pl-16 lg:pl-12 lg:mt-36 md:mt-36 sm:mt-36 -mt-[16rem] pl-12 space-y-6 ml-8">
+            {/* Alert Cards */}
+            <div className="w-full mt-8 lg:mt-36 space-y-6 pl-0 sm:pl-8 md:pl-16 lg:pl-20">
               <div ref={ignoredContainerRef}>
                 <AlertCard
                   title="Ignored Alerts"
@@ -195,6 +193,7 @@ export const WithoutSimbian = () => {
                 />
               </div>
 
+              {/* Alert animations */}
               <AnimatePresence>
                 {currentAnimation === "ignored" &&
                   ignoredContainerRef.current &&
